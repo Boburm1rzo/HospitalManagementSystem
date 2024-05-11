@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HospitalManagementSystem.Data.Migrations
 {
     [DbContext(typeof(HospitalDbContext))]
-    [Migration("20240509142812_Add_Visit_Appointment")]
-    partial class Add_Visit_Appointment
+    [Migration("20240511092240_initial_create")]
+    partial class initial_create
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -117,8 +117,8 @@ namespace HospitalManagementSystem.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("Birthdate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("Birthdate")
+                        .HasColumnType("date");
 
                     b.Property<string>("FirstName")
                         .IsRequired()

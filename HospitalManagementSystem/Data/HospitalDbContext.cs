@@ -18,7 +18,7 @@ namespace HospitalManagementSystem.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=desktop-fb3ogeq;Initial Catalog=Hospital_Management;Integrated Security=True;Pooling=False;Encrypt=True;Trust Server Certificate=True");
+            optionsBuilder.UseSqlServer("Data Source=akhmadovich;Initial Catalog=Hospital_Management;Integrated Security=True;Pooling=False;Encrypt=True;Trust Server Certificate=True");
             base.OnConfiguring(optionsBuilder);
         }
 
