@@ -10,6 +10,7 @@ namespace HospitalManagementSystem.Data
         public virtual DbSet<Specialization> Specializations { get; set; }
         public virtual DbSet<Appointment> Appointments { get; set; }
         public virtual DbSet<Visit> Visits { get; set; }
+        public virtual DbSet<DoctorSpecialization> DoctorSpecializations { get; set; }
 
         public HospitalDbContext()
         {
@@ -59,6 +60,11 @@ namespace HospitalManagementSystem.Data
                 .HasOne(e => e.Visit)
                 .WithOne(v => v.Appointment)
                 .HasForeignKey<Visit>(e => e.AppointmentId);
+
+            modelBuilder.Entity<DoctorSpecialization>()
+                .ToTable(nameof(DoctorSpecialization));
+            modelBuilder.Entity<DoctorSpecialization>()
+                .HasKey(e => e.Id);
 
             base.OnModelCreating(modelBuilder);
         }
