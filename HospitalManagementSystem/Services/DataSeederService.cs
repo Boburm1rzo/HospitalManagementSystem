@@ -8,6 +8,7 @@ namespace HospitalManagementSystem.Services
     public class DataSeederService
     {
         private static Faker faker = new();
+
         public static void SeedDatabase()
         {
             using var context = new HospitalDbContext();
@@ -15,10 +16,13 @@ namespace HospitalManagementSystem.Services
             CreatePatients(context);
             CreateDoctors(context);
             CreateSpecializations(context);
+            CreateDoctorSpecializations(context);
         }
 
         private static void CreatePatients(HospitalDbContext context)
         {
+            if (context.Patients.Any()) return;
+
             for (int i = 0; i < 100; i++)
             {
                 var patient = new Patient();
@@ -34,8 +38,11 @@ namespace HospitalManagementSystem.Services
 
             context.SaveChanges();
         }
+        
         private static void CreateDoctors(HospitalDbContext context)
         {
+            if (context.Doctors.Any()) return;
+
             for (int i = 0; i < 20; i++)
             {
                 var doctor = new Doctor();
@@ -49,15 +56,54 @@ namespace HospitalManagementSystem.Services
 
             context.SaveChanges();
         }
+        
         private static void CreateSpecializations(HospitalDbContext context)
         {
-            for (int i = 0; i < 20; i++)
+            if (context.Specializations.Any()) return;
+
+            var values = Enum.GetNames(typeof(DoctorSpecializationType));
+
+            foreach (var value in values)
             {
-                var specialization = new Specialization();
-                var spec = faker.Random.Enum<DoctorSpecializationEnum>();
-                specialization.Name = spec.ToString();
+                var specialization = new Specialization
+                {
+                    Name = value,
+                    Description = faker.Lorem.Text()
+                };
 
                 context.Specializations.Add(specialization);
+            }
+
+            context.SaveChanges();
+        }
+        
+        private static void CreateDoctorSpecializations(HospitalDbContext context)
+        {
+            if (context.DoctorSpecializations.Any()) return;
+
+            var doctorIds = context.Doctors.Select(x => x.Id).ToArray(); // [1, 2, 3]
+            var specializatoinIds = context.Specializations.Select(x => x.Id).ToArray(); // [5, 9, 15]
+
+            foreach(var doctorId in doctorIds) // 1
+            {
+                var specializationsCount = faker.Random.Number(1, 3); // 2
+                HashSet<int> specializations = new(); // [9, 5]
+
+                for(int i = 0; i < specializationsCount; i++) // i = 0, i = 1
+                {
+                    var randomSpecializationId = faker.PickRandom(specializatoinIds); // 9, 5
+                    specializations.Add(randomSpecializationId); // 5
+                }
+
+                foreach(var specializationId in specializations) // [9, 5]
+                {
+                    var doctorSpecialization = new DoctorSpecialization
+                    {
+                        DoctorId = doctorId, // 1
+                        SpecializationId = specializationId // 5
+                    };
+                    context.DoctorSpecializations.Add(doctorSpecialization); // 1 - 5
+                }
             }
 
             context.SaveChanges();
@@ -70,6 +116,7 @@ namespace HospitalManagementSystem.Services
 
             return faker.Date.BetweenDateOnly(minDate, maxDate);
         }
+        
         private static (Gender, Name.Gender) GetGender()
         {
             var randomGender = faker.Random.Enum<Gender>();

@@ -1,6 +1,6 @@
 ﻿namespace HospitalManagementSystem.Models
 {
-    public enum DoctorSpecializationEnum
+    public enum DoctorSpecializationType
     {
         Dermatology,
         Oncology,
