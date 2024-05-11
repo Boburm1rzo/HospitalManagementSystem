@@ -15,5 +15,9 @@
         public virtual Patient Patient { get; set; }
 
         public virtual Visit? Visit { get; set; }
+        public Appointment()
+        {
+
+        }
     }
 }
