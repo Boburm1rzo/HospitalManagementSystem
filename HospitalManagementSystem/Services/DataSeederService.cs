@@ -2,23 +2,24 @@
 using Bogus.DataSets;
 using HospitalManagementSystem.Data;
 using HospitalManagementSystem.Models;
-using System.Windows.Forms;
 
 namespace HospitalManagementSystem.Services
 {
     public class DataSeederService
     {
-        private static Faker faker = new("ru");
+        private static Faker faker = new();
         public static void SeedDatabase()
         {
             using var context = new HospitalDbContext();
 
             CreatePatients(context);
+            CreateDoctors(context);
+            CreateSpecializations(context);
         }
 
         private static void CreatePatients(HospitalDbContext context)
         {
-            for(int i = 0; i < 100; i++)
+            for (int i = 0; i < 100; i++)
             {
                 var patient = new Patient();
                 var (randomGender, fakerGender) = GetGender();
@@ -33,6 +34,34 @@ namespace HospitalManagementSystem.Services
 
             context.SaveChanges();
         }
+        private static void CreateDoctors(HospitalDbContext context)
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                var doctor = new Doctor();
+                var (gender, fakerGender) = GetGender();
+                doctor.FirstName = faker.Name.FirstName(fakerGender);
+                doctor.LastName = faker.Name.LastName(fakerGender);
+                doctor.PhoneNumber = faker.Phone.PhoneNumber("+998##-###-##-##");
+
+                context.Doctors.Add(doctor);
+            }
+
+            context.SaveChanges();
+        }
+        private static void CreateSpecializations(HospitalDbContext context)
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                var specialization = new Specialization();
+                var spec = faker.Random.Enum<DoctorSpecializationEnum>();
+                specialization.Name = spec.ToString();
+
+                context.Specializations.Add(specialization);
+            }
+
+            context.SaveChanges();
+        }
 
         private static DateOnly GetRandomBirthdate()
         {
@@ -41,7 +70,6 @@ namespace HospitalManagementSystem.Services
 
             return faker.Date.BetweenDateOnly(minDate, maxDate);
         }
-
         private static (Gender, Name.Gender) GetGender()
         {
             var randomGender = faker.Random.Enum<Gender>();
