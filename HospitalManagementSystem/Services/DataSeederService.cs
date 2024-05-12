@@ -7,7 +7,7 @@ namespace HospitalManagementSystem.Services
 {
     public class DataSeederService
     {
-        private static Faker faker = new();
+        private static readonly Faker faker = new();
 
         public static void SeedDatabase()
         {
@@ -81,28 +81,28 @@ namespace HospitalManagementSystem.Services
         {
             if (context.DoctorSpecializations.Any()) return;
 
-            var doctorIds = context.Doctors.Select(x => x.Id).ToArray(); // [1, 2, 3]
-            var specializatoinIds = context.Specializations.Select(x => x.Id).ToArray(); // [5, 9, 15]
+            var doctorIds = context.Doctors.Select(x => x.Id).ToArray(); 
+            var specializatoinIds = context.Specializations.Select(x => x.Id).ToArray(); 
 
-            foreach(var doctorId in doctorIds) // 1
+            foreach(var doctorId in doctorIds) 
             {
-                var specializationsCount = faker.Random.Number(1, 3); // 2
-                HashSet<int> specializations = new(); // [9, 5]
+                var specializationsCount = faker.Random.Number(1, 3); 
+                HashSet<int> specializations = []; 
 
-                for(int i = 0; i < specializationsCount; i++) // i = 0, i = 1
+                for(int i = 0; i < specializationsCount; i++) 
                 {
-                    var randomSpecializationId = faker.PickRandom(specializatoinIds); // 9, 5
-                    specializations.Add(randomSpecializationId); // 5
+                    var randomSpecializationId = faker.PickRandom(specializatoinIds);
+                    specializations.Add(randomSpecializationId); 
                 }
 
-                foreach(var specializationId in specializations) // [9, 5]
+                foreach(var specializationId in specializations) 
                 {
                     var doctorSpecialization = new DoctorSpecialization
                     {
-                        DoctorId = doctorId, // 1
-                        SpecializationId = specializationId // 5
+                        DoctorId = doctorId, 
+                        SpecializationId = specializationId 
                     };
-                    context.DoctorSpecializations.Add(doctorSpecialization); // 1 - 5
+                    context.DoctorSpecializations.Add(doctorSpecialization); 
                 }
             }
 

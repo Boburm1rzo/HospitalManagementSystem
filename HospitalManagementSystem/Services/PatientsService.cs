@@ -26,7 +26,7 @@ namespace HospitalManagementSystem.Services
                     x.PhoneNumber.Contains(search));
             }
 
-            return query.ToList();
+            return [.. query];
         }
 
         public Patient? GetPatientById(int id)

@@ -21,16 +21,17 @@
                 Style="{StaticResource MaterialDesignNavigationRailTabControl}">
                 <TabItem>
                     <TabItem.Header>
-                        <StackPanel Width="auto" Height="auto">
-                            <materialDesign:PackIcon
-                                Width="24"
-                                Height="24"
-                                HorizontalAlignment="Center"
-                                Kind="Doctor" />
-                            <TextBlock HorizontalAlignment="Center" Text="Doctors" />
+                        <StackPanel Width="auto"
+                                    Height="auto">
+                            <materialDesign:PackIcon Width="24"
+                                                     Height="24"
+                                                     HorizontalAlignment="Center"
+                                                     Kind="Doctor" />
+                            <TextBlock HorizontalAlignment="Center"
+                                       Text="Doctors" />
                         </StackPanel>
                     </TabItem.Header>
-                    <Grid Width="100" />
+                    <views:DoctorsView />
                 </TabItem>
                 <TabItem>
                     <TabItem.Header>

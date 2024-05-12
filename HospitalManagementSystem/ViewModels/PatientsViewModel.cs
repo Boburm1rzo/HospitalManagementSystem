@@ -25,7 +25,7 @@ namespace HospitalManagementSystem.ViewModels
 
         public ICommand AddCommand { get; }
 
-        private List<Patient> patientsList;
+        private readonly List<Patient> patientsList;
         public ObservableCollection<Patient> Patients { get; }
 
         public PatientsViewModel()
@@ -55,6 +55,7 @@ namespace HospitalManagementSystem.ViewModels
             var patients = _patientsService.GetPatients(searchText);
 
             Patients.Clear();
+
             foreach (var patient in patients)
             {
                 Patients.Add(patient);
