@@ -35,18 +35,57 @@
             Margin="0,50,100,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
-            Command="{Binding AddCommand}"
-            Content="Add+ " />
+            Command="{Binding AddCommand}">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Add" Foreground="WhiteSmoke" />
+                <materialDesign:PackIcon
+                    Width="25"
+                    Height="25"
+                    VerticalAlignment="Center"
+                    Foreground="WhiteSmoke"
+                    Kind="Plus" />
+            </StackPanel>
+        </Button>
 
         <materialDesign:Card
             Grid.Row="1"
             Grid.ColumnSpan="2"
             Margin="100,25,100,25">
             <DataGrid
+                x:Name="patientsDataGrid"
                 AutoGenerateColumns="False"
                 IsReadOnly="True"
-                ItemsSource="{Binding Patients}">
+                IsSynchronizedWithCurrentItem="True"
+                ItemsSource="{Binding Patients}"
+                SelectedItem="{Binding SelectedPatient}">
+                <DataGrid.InputBindings>
+                    <MouseBinding Command="{Binding ShowDetailsCommand}" Gesture="LeftDoubleClick" />
+                </DataGrid.InputBindings>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding EditCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.SelectedItem}">
+                            <MenuItem.Icon>
+                                <materialDesign:PackIcon Foreground="#c79d20" Kind="Pencil" />
+                            </MenuItem.Icon>
+                            <MenuItem.Header>
+                                <Label Content="Edit" Foreground="#c79d20" />
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem Command="{Binding DeleteCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.SelectedItem}">
+                            <MenuItem.Icon>
+                                <materialDesign:PackIcon Foreground="#a32e45" Kind="TrashCan" />
+                            </MenuItem.Icon>
+                            <MenuItem.Header>
+                                <Label Content="Delete" Foreground="#a32e45" />
+                            </MenuItem.Header>
+                        </MenuItem>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
                 <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="150"
+                        Binding="{Binding Id}"
+                        Header="Patient Id" />
                     <DataGridTextColumn
                         Width="150"
                         Binding="{Binding FirstName}"
