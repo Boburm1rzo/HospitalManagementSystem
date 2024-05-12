@@ -4,6 +4,7 @@ using HospitalManagementSystem.Views.Dialogs;
 using MvvmHelpers;
 using MvvmHelpers.Commands;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace HospitalManagementSystem.ViewModels
@@ -23,7 +24,17 @@ namespace HospitalManagementSystem.ViewModels
             }
         }
 
+        private Patient _selectedPatient;
+        public Patient SelectedPatient
+        {
+            get => _selectedPatient;
+            set => SetProperty(ref _selectedPatient, value);
+        }
+
         public ICommand AddCommand { get; }
+        public ICommand ShowDetailsCommand { get; }
+        public ICommand EditCommand { get; }
+        public ICommand DeleteCommand { get; }
 
         private List<Patient> patientsList;
         public ObservableCollection<Patient> Patients { get; }
@@ -35,6 +46,9 @@ namespace HospitalManagementSystem.ViewModels
             patientsList = [];
 
             AddCommand = new Command(OnAdd);
+            ShowDetailsCommand = new Command(OnShowDetails);
+            EditCommand = new Command<Patient>(OnEdit);
+            DeleteCommand = new Command<Patient>(OnDelete);
 
             Load();
         }
@@ -65,6 +79,43 @@ namespace HospitalManagementSystem.ViewModels
         {
             var dialog = new PatientDialog();
             dialog.ShowDialog();
+        }
+
+        private void OnShowDetails()
+        {
+            if (SelectedPatient is null)
+            {
+                return;
+            }
+
+            var dialog = new PatientDetailsDialog(SelectedPatient);
+            dialog.ShowDialog();
+        }
+
+        private void OnEdit(Patient patient)
+        {
+
+        }
+
+        private void OnDelete(Patient patient)
+        {
+            var result = MessageBox.Show(
+                $"Are you sure you want to delete: {patient.FirstName} {patient.LastName}?",
+                "Confirm your action.",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.No)
+            {
+                return;
+            }
+
+            _patientsService.Delete(patient);
+            MessageBox.Show(
+                $"Patient: {patient.FirstName} {patient.LastName} successfully deleted.",
+                "Success",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
     }
 }

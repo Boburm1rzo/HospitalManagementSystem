@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HospitalManagementSystem", "HospitalManagementSystem\HospitalManagementSystem.csproj", "{570D3B76-5692-4AD5-B1FC-0058F8328F57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HospitalManagementSystem", "HospitalManagementSystem\HospitalManagementSystem.csproj", "{570D3B76-5692-4AD5-B1FC-0058F8328F57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HospitalManagementSystem.Tests", "HospitalManagementSystem.Tests\HospitalManagementSystem.Tests.csproj", "{EB282465-D8FB-411D-8EAB-109020A941A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HospitalManagementSystem.Tests", "HospitalManagementSystem.Tests\HospitalManagementSystem.Tests.csproj", "{EB282465-D8FB-411D-8EAB-109020A941A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

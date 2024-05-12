@@ -17,6 +17,8 @@ namespace HospitalManagementSystem.Services
             CreateDoctors(context);
             CreateSpecializations(context);
             CreateDoctorSpecializations(context);
+            CreateAppointments(context);
+            CreateVisits(context);
         }
 
         private static void CreatePatients(HospitalDbContext context)
@@ -109,6 +111,62 @@ namespace HospitalManagementSystem.Services
             context.SaveChanges();
         }
 
+        private static void CreateAppointments(HospitalDbContext context)
+        {
+            if (context.Appointments.Any()) return;
+
+            var patientIds = context.Patients.Select(x => x.Id).ToArray();
+            var doctorIds = context.Doctors.Select(x => x.Id).ToArray();
+            var minDate = DateOnly.FromDateTime(DateTime.Now.AddYears(-2));
+            var maxDate = DateOnly.FromDateTime(DateTime.Now.AddMonths(2));
+            var minTime = TimeOnly.FromTimeSpan(TimeSpan.FromHours(8));
+            var maxTime = TimeOnly.FromTimeSpan(TimeSpan.FromHours(20));
+
+            foreach(var patientId in patientIds)
+            {
+                var appointmentsCount = faker.Random.Int(1, 5);
+                for(int i = 0; i < appointmentsCount; i++)
+                {
+                    var randomDoctorId = faker.PickRandom(doctorIds);
+                    var appointment = new Appointment
+                    {
+                        Comments = faker.Lorem.Sentence(),
+                        Date = faker.Date.BetweenDateOnly(minDate, maxDate),
+                        Time = faker.Date.BetweenTimeOnly(minTime, maxTime),
+                        PatientId = patientId,
+                        DoctorId = randomDoctorId
+                    };
+                    appointment.Status = GetRandomStatus(appointment);
+                    context.Appointments.Add(appointment);
+                }
+            }
+
+            context.SaveChanges();
+        }
+
+        private static void CreateVisits(HospitalDbContext context)
+        {
+            if (context.Visits.Any()) return;
+
+            var appointmentIds = context.Appointments
+                .Where(x => x.Status == AppointmentStatus.Closed)
+                .Select(x => x.Id)
+                .ToArray();
+
+            foreach(var appoinmentId in appointmentIds)
+            {
+                var visit = new Visit
+                {
+                    Comments = faker.Lorem.Sentence(),
+                    TotalDue = faker.Random.Decimal(100_000, 1_500_000),
+                    AppointmentId = appoinmentId
+                };
+                context.Visits.Add(visit);
+            }
+
+            context.SaveChanges();
+        }
+
         private static DateOnly GetRandomBirthdate()
         {
             var minDate = new DateOnly(1940, 1, 1);
@@ -123,6 +181,21 @@ namespace HospitalManagementSystem.Services
             var fakerGender = randomGender == Gender.Male ? Name.Gender.Male : Name.Gender.Female;
 
             return (randomGender, fakerGender);
+        }
+
+        private static AppointmentStatus GetRandomStatus(Appointment appointment)
+        {
+            var today = DateOnly.FromDateTime(DateTime.Now);
+            var now = TimeOnly.FromDateTime(DateTime.Now);
+
+            if (appointment.Date > today && appointment.Time > now)
+            {
+                return AppointmentStatus.Pending;
+            }
+
+            var random = faker.Random.Number(1, 10);
+
+            return random % 2 == 0 ? AppointmentStatus.Cancelled : AppointmentStatus.Closed;
         }
     }
 }

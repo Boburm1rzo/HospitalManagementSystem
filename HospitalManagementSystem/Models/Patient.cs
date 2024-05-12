@@ -1,4 +1,6 @@
-﻿namespace HospitalManagementSystem.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace HospitalManagementSystem.Models
 {
     public class Patient
     {
@@ -14,6 +16,11 @@
         public Patient()
         {
             Appointments = new List<Appointment>();
+        }
+
+        public override string ToString()
+        {
+            return $"[{Id}] {FirstName} {LastName}";
         }
     }
 }

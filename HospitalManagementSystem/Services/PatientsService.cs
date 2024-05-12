@@ -16,6 +16,10 @@ namespace HospitalManagementSystem.Services
         public List<Patient> GetPatients(string search = "")
         {
             var query = _context.Patients
+                .Include(x => x.Appointments)
+                .ThenInclude(a => a.Doctor)
+                .Include(x => x.Appointments)
+                .ThenInclude(x => x.Visit)
                 .AsNoTracking()
                 .AsQueryable();
 

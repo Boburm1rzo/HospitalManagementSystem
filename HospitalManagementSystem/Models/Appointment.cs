@@ -1,4 +1,7 @@
-﻿namespace HospitalManagementSystem.Models
+﻿using HospitalManagementSystem.Helpers;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace HospitalManagementSystem.Models
 {
     public class Appointment
     {
@@ -15,9 +18,13 @@
         public virtual Patient Patient { get; set; }
 
         public virtual Visit? Visit { get; set; }
+
         public Appointment()
         {
 
         }
+
+        [NotMapped]
+        public string CommentsShort => Comments.GetShort();
     }
 }
