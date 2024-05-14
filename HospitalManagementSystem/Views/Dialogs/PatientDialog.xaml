@@ -38,6 +38,7 @@
             FontWeight="SemiBold" />
 
         <TextBox
+            x:Name="inputFirstName"
             Grid.Row="1"
             Grid.ColumnSpan="3"
             Height="40"
@@ -46,6 +47,7 @@
             md:HintAssist.Hint="Enter First Name"
             Style="{StaticResource MaterialDesignOutlinedTextBox}" />
         <TextBox
+            x:Name="inputLastName"
             Grid.Row="1"
             Grid.Column="3"
             Grid.ColumnSpan="3"
@@ -56,6 +58,7 @@
             Style="{StaticResource MaterialDesignOutlinedTextBox}" />
 
         <TextBox
+            x:Name="inputPhoneNumber"
             Grid.Row="2"
             Grid.Column="2"
             Grid.ColumnSpan="2"
@@ -65,6 +68,7 @@
             md:HintAssist.Hint="Enter Phone Number"
             Style="{StaticResource MaterialDesignOutlinedTextBox}" />
         <DatePicker
+            x:Name="inputBirthdate"
             Grid.Row="2"
             Grid.Column="0"
             Grid.ColumnSpan="2"
@@ -74,6 +78,7 @@
             md:HintAssist.Hint="Choose birthdate"
             Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
         <ComboBox
+            x:Name="inputGender"
             Grid.Row="2"
             Grid.Column="4"
             Grid.ColumnSpan="2"
@@ -84,6 +89,7 @@
             Style="{StaticResource MaterialDesignOutlinedComboBox}" />
 
         <Button
+            Click="CancelButton"
             Grid.Row="3"
             Grid.Column="0"
             Grid.ColumnSpan="3"
@@ -93,6 +99,7 @@
             Content="Cancel"
             Style="{StaticResource MaterialDesignPaperDarkButton}" />
         <Button
+            Click="AddNewPatientButton"
             Grid.Row="3"
             Grid.Column="3"
             Grid.ColumnSpan="3"

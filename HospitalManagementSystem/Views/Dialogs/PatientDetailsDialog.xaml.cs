@@ -20,5 +20,6 @@ namespace HospitalManagementSystem.Views.Dialogs
         {
             Close();
         }
+
     }
 }
