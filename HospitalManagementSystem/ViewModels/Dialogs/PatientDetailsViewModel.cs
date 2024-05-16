@@ -12,6 +12,7 @@ public class PatientDetailsViewModel : BaseViewModel
         get => _appointmentsTitle;
         set => SetProperty(ref _appointmentsTitle, value);
     }
+    
     private string _historyTitle = string.Empty;
     public string HistoryTitle
     {
