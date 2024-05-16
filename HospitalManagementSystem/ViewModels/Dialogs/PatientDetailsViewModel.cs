@@ -1,6 +1,8 @@
 ﻿using HospitalManagementSystem.Models;
 using MvvmHelpers;
+using MvvmHelpers.Commands;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace HospitalManagementSystem.ViewModels.Dialogs;
 
@@ -29,6 +31,8 @@ public class PatientDetailsViewModel : BaseViewModel
     public ObservableCollection<Appointment> Appointments { get; }
     public ObservableCollection<Visit> Visits { get; }
 
+    public ICommand SaveCommand { get; }
+
     public PatientDetailsViewModel(Patient patient)
     {
         ArgumentNullException.ThrowIfNull(patient);
@@ -52,5 +56,12 @@ public class PatientDetailsViewModel : BaseViewModel
         HistoryTitle = Visits.Count > 0
             ? "Patient Visits"
             : $"{FirstName} {LastName} has no visits yet.";
+
+        SaveCommand = new Command(OnSave);
+    }
+
+    private void OnSave()
+    {
+        int g = 0;
     }
 }

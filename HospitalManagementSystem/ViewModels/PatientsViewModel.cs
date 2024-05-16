@@ -31,6 +31,69 @@ namespace HospitalManagementSystem.ViewModels
             set => SetProperty(ref _selectedPatient, value);
         }
 
+        #region Pagination
+
+        private int pagesCount;
+        private int firstPageNumber = 1;
+        private int lastPageNumber = 3;
+
+        private int _currentPage = 1;
+        public int CurrentPage 
+        {
+            get => _currentPage;
+            set
+            {
+                SetProperty(ref _currentPage, value);
+                HasPreviousPage = CurrentPage > 3;
+                HasNextPage = CurrentPage < pagesCount;
+            }
+
+            // [1], 2, 3
+            // 1, [2], 3
+            // 1, 2, [3]
+            // 2, 3, [4]
+        }
+
+        private bool _hasNextPage;
+        public bool HasNextPage
+        {
+            get => _hasNextPage;
+            set => SetProperty(ref _hasNextPage, value);
+        }
+
+        private bool _hasPreviousPage = false;
+        public bool HasPreviousPage
+        {
+            get => _hasPreviousPage;
+            set => SetProperty(ref _hasPreviousPage, value);
+        }
+
+        private int _firstButtonContent = 1;
+        public int FirstButtonContent 
+        { 
+            get => _firstButtonContent; 
+            set => SetProperty(ref _firstButtonContent, value); 
+        }
+        
+        private int _secondButtonContent = 2;
+        public int SecondButtonContent 
+        {
+            get => _secondButtonContent; 
+            set => SetProperty(ref _secondButtonContent, value); 
+        }
+
+        private int _thirdButtonContent = 3;
+        public int ThirdButtonContent 
+        { 
+            get => _thirdButtonContent; 
+            set => SetProperty(ref _thirdButtonContent, value); 
+        }
+
+        public ICommand NextPageCommand { get; }
+        public ICommand PreviousPageCommand { get; }
+
+        #endregion
+
         public ICommand AddCommand { get; }
         public ICommand ShowDetailsCommand { get; }
         public ICommand EditCommand { get; }
@@ -50,12 +113,44 @@ namespace HospitalManagementSystem.ViewModels
             EditCommand = new Command<Patient>(OnEdit);
             DeleteCommand = new Command<Patient>(OnDelete);
 
+            NextPageCommand = new Command(OnNextPage);
+            PreviousPageCommand = new Command(OnPreviousPage);
+
             Load();
+        }
+
+        private void OnNextPage()
+        {
+            if (_currentPage >= pagesCount)
+            {
+                return;
+            }
+
+            CurrentPage += 3;
+            FirstButtonContent += 3;
+            SecondButtonContent += 3;
+            ThirdButtonContent += 3;
+        }
+
+        private void OnPreviousPage()
+        {
+            if (_currentPage <= 1)
+            {
+                return;
+            }
+
+            CurrentPage -= 3;
+            FirstButtonContent -= 3;
+            SecondButtonContent -= 3;
+            ThirdButtonContent -= 3;
         }
 
         private void Load()
         {
             var patients = _patientsService.GetPatients();
+            var totalCount = _patientsService.GetTotalCount();
+            pagesCount = (int)Math.Ceiling((double)totalCount / 20);
+            HasNextPage = pagesCount > 3;
 
             foreach(var patient in patients)
             {

@@ -12,6 +12,10 @@ namespace HospitalManagementSystem.Views.Dialogs
         public PatientDialog()
         {
             InitializeComponent();
+
+            // Binding -> 
+
+            DataContext = new PatientDialogViewModel();
         }
     }
 }

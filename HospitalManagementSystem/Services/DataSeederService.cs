@@ -25,7 +25,7 @@ namespace HospitalManagementSystem.Services
         {
             if (context.Patients.Any()) return;
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 10000; i++)
             {
                 var patient = new Patient();
                 var (randomGender, fakerGender) = GetGender();
@@ -40,7 +40,7 @@ namespace HospitalManagementSystem.Services
 
             context.SaveChanges();
         }
-        
+
         private static void CreateDoctors(HospitalDbContext context)
         {
             if (context.Doctors.Any()) return;
@@ -58,7 +58,7 @@ namespace HospitalManagementSystem.Services
 
             context.SaveChanges();
         }
-        
+
         private static void CreateSpecializations(HospitalDbContext context)
         {
             if (context.Specializations.Any()) return;
@@ -78,33 +78,33 @@ namespace HospitalManagementSystem.Services
 
             context.SaveChanges();
         }
-        
+
         private static void CreateDoctorSpecializations(HospitalDbContext context)
         {
             if (context.DoctorSpecializations.Any()) return;
 
-            var doctorIds = context.Doctors.Select(x => x.Id).ToArray(); 
-            var specializatoinIds = context.Specializations.Select(x => x.Id).ToArray(); 
+            var doctorIds = context.Doctors.Select(x => x.Id).ToArray();
+            var specializatoinIds = context.Specializations.Select(x => x.Id).ToArray();
 
-            foreach(var doctorId in doctorIds) 
+            foreach (var doctorId in doctorIds)
             {
-                var specializationsCount = faker.Random.Number(1, 3); 
-                HashSet<int> specializations = []; 
+                var specializationsCount = faker.Random.Number(1, 3);
+                HashSet<int> specializations = [];
 
-                for(int i = 0; i < specializationsCount; i++) 
+                for (int i = 0; i < specializationsCount; i++)
                 {
                     var randomSpecializationId = faker.PickRandom(specializatoinIds);
-                    specializations.Add(randomSpecializationId); 
+                    specializations.Add(randomSpecializationId);
                 }
 
-                foreach(var specializationId in specializations) 
+                foreach (var specializationId in specializations)
                 {
                     var doctorSpecialization = new DoctorSpecialization
                     {
-                        DoctorId = doctorId, 
-                        SpecializationId = specializationId 
+                        DoctorId = doctorId,
+                        SpecializationId = specializationId
                     };
-                    context.DoctorSpecializations.Add(doctorSpecialization); 
+                    context.DoctorSpecializations.Add(doctorSpecialization);
                 }
             }
 
@@ -122,10 +122,10 @@ namespace HospitalManagementSystem.Services
             var minTime = TimeOnly.FromTimeSpan(TimeSpan.FromHours(8));
             var maxTime = TimeOnly.FromTimeSpan(TimeSpan.FromHours(20));
 
-            foreach(var patientId in patientIds)
+            foreach (var patientId in patientIds)
             {
                 var appointmentsCount = faker.Random.Int(1, 5);
-                for(int i = 0; i < appointmentsCount; i++)
+                for (int i = 0; i < appointmentsCount; i++)
                 {
                     var randomDoctorId = faker.PickRandom(doctorIds);
                     var appointment = new Appointment
@@ -153,7 +153,7 @@ namespace HospitalManagementSystem.Services
                 .Select(x => x.Id)
                 .ToArray();
 
-            foreach(var appoinmentId in appointmentIds)
+            foreach (var appoinmentId in appointmentIds)
             {
                 var visit = new Visit
                 {
@@ -174,7 +174,7 @@ namespace HospitalManagementSystem.Services
 
             return faker.Date.BetweenDateOnly(minDate, maxDate);
         }
-        
+
         private static (Gender, Name.Gender) GetGender()
         {
             var randomGender = faker.Random.Enum<Gender>();

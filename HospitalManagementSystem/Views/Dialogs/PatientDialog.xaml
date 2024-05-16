@@ -44,7 +44,8 @@
             Margin="20,0"
             Padding="10"
             md:HintAssist.Hint="Enter First Name"
-            Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+            Text="{Binding FirstName}" />
         <TextBox
             Grid.Row="1"
             Grid.Column="3"
@@ -53,7 +54,8 @@
             Margin="20,0"
             Padding="10"
             md:HintAssist.Hint="Enter Last Name"
-            Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+            Text="{Binding LastName}" />
 
         <TextBox
             Grid.Row="2"
@@ -63,7 +65,8 @@
             Margin="20,0"
             Padding="10"
             md:HintAssist.Hint="Enter Phone Number"
-            Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+            Style="{StaticResource MaterialDesignOutlinedTextBox}"
+            Text="{Binding PhoneNumber}" />
         <DatePicker
             Grid.Row="2"
             Grid.Column="0"
@@ -72,7 +75,8 @@
             Margin="20,0"
             Padding="10"
             md:HintAssist.Hint="Choose birthdate"
-            Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+            Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+            Text="{Binding Birthdate}" />
         <ComboBox
             Grid.Row="2"
             Grid.Column="4"
@@ -81,6 +85,7 @@
             Margin="20,0"
             Padding="10"
             md:HintAssist.Hint="Select Gender"
+            SelectedItem="{Binding SelectedGender}"
             Style="{StaticResource MaterialDesignOutlinedComboBox}" />
 
         <Button
@@ -101,6 +106,7 @@
             Margin="20,0"
             Background="#2ec96f"
             BorderBrush="#2ec96f"
+            Command="{Binding SaveCommand}"
             Content="Save" />
     </Grid>
 </Window>

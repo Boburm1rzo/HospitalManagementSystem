@@ -13,7 +13,7 @@ namespace HospitalManagementSystem.Services
             _context = new HospitalDbContext();
         }
 
-        public List<Patient> GetPatients(string search = "")
+        public List<Patient> GetPatients(string search = "", int pageNumber = 1, int pageSize = 20)
         {
             var query = _context.Patients
                 .Include(x => x.Appointments)
@@ -30,8 +30,15 @@ namespace HospitalManagementSystem.Services
                     x.PhoneNumber.Contains(search));
             }
 
-            return [.. query];
+            var patients = query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return patients;
         }
+
+        public int GetTotalCount() => _context.Patients.Count();
 
         public Patient? GetPatientById(int id)
             => _context.Patients.FirstOrDefault(x => x.Id == id);

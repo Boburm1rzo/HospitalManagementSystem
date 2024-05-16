@@ -13,7 +13,7 @@ namespace HospitalManagementSystem.Services
 			_context = new HospitalDbContext();
 		}
 
-		public List<Doctor> GetDoctors(string search = "")
+		public List<Doctor> GetDoctors(string search = "", int? specializationId = null)
 		{
 			var query = _context.Doctors
 				.AsNoTracking()
@@ -26,7 +26,14 @@ namespace HospitalManagementSystem.Services
 					x.PhoneNumber.Contains(search));
 			}
 
-			return [.. query];
+			if (specializationId is not null)
+			{
+				query = query.Where(x => x.Specializations.Any(s => s.SpecializationId == specializationId));
+			}
+
+			var doctors = query.ToList();
+
+			return doctors;
 		}
 
 		public Doctor? GetDoctorById(int id)
