@@ -50,6 +50,7 @@
         <materialDesign:Card
             Grid.Row="1"
             Grid.ColumnSpan="2"
+            Height="30"
             Margin="100,25,100,0">
             <StackPanel>
                 <DataGrid
