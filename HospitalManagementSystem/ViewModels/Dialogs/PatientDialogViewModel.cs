@@ -19,6 +19,13 @@ public class PatientDialogViewModel : BaseViewModel
     public string LastName { get; set; }
     public DateOnly Birthdate { get; set; }
 
+    private bool _isMaleSelected = true;
+    public bool IsMaleSelected
+    { 
+        get => _isMaleSelected;
+        set => SetProperty(ref _isMaleSelected, value); 
+    }
+
     public ICommand SaveCommand { get; }
     
     public PatientDialogViewModel()

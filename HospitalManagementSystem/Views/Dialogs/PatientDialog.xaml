@@ -3,28 +3,29 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:HospitalManagementSystem.Helpers"
     xmlns:local="clr-namespace:HospitalManagementSystem.Views.Dialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
     Title="Title"
     Width="600"
-    Height="650"
+    Height="550"
     ResizeMode="NoResize"
     Style="{StaticResource MaterialDesignWindow}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+    <Window.Resources>
+        <helpers:InvertBoolConverter x:Key="InvertBool" />
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="0.5*" />
-            <RowDefinition Height="0.5*" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="3*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -39,7 +40,7 @@
 
         <TextBox
             Grid.Row="1"
-            Grid.ColumnSpan="3"
+            Grid.Column="0"
             Height="40"
             Margin="20,0"
             Padding="10"
@@ -59,8 +60,7 @@
 
         <TextBox
             Grid.Row="2"
-            Grid.Column="2"
-            Grid.ColumnSpan="2"
+            Grid.Column="0"
             Height="40"
             Margin="20,0"
             Padding="10"
@@ -69,38 +69,46 @@
             Text="{Binding PhoneNumber}" />
         <DatePicker
             Grid.Row="2"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
+            Grid.Column="1"
             Height="40"
             Margin="20,0"
             Padding="10"
             md:HintAssist.Hint="Choose birthdate"
             Style="{StaticResource MaterialDesignOutlinedDatePicker}"
             Text="{Binding Birthdate}" />
-        <ComboBox
-            Grid.Row="2"
-            Grid.Column="4"
-            Grid.ColumnSpan="2"
-            Height="40"
-            Margin="20,0"
-            Padding="10"
-            md:HintAssist.Hint="Select Gender"
-            SelectedItem="{Binding SelectedGender}"
-            Style="{StaticResource MaterialDesignOutlinedComboBox}" />
-
-        <Button
+        <ListBox
+            x:Name="RadioButtonGroupChoiceChipPrimary"
             Grid.Row="3"
             Grid.Column="0"
-            Grid.ColumnSpan="3"
+            Grid.ColumnSpan="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Style="{StaticResource MaterialDesignChoiceChipPrimaryListBox}">
+            <ListBoxItem IsSelected="{Binding IsMaleSelected}">
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="HumanMale" />
+                    <Label Content="Male" />
+                </StackPanel>
+            </ListBoxItem>
+            <ListBoxItem IsSelected="{Binding Path=!IsMaleSelected}">
+                <StackPanel Orientation="Horizontal">
+                    <md:PackIcon Kind="HumanFemale" />
+                    <Label Content="Female" />
+                </StackPanel>
+            </ListBoxItem>
+        </ListBox>
+
+        <Button
+            Grid.Row="4"
+            Grid.Column="0"
             Width="200"
             Height="35"
             Margin="20,0"
             Content="Cancel"
             Style="{StaticResource MaterialDesignPaperDarkButton}" />
         <Button
-            Grid.Row="3"
-            Grid.Column="3"
-            Grid.ColumnSpan="3"
+            Grid.Row="4"
+            Grid.Column="1"
             Width="200"
             Height="35"
             Margin="20,0"

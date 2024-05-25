@@ -38,7 +38,7 @@ namespace HospitalManagementSystem.ViewModels
         private int lastPageNumber = 3;
 
         private int _currentPage = 1;
-        public int CurrentPage 
+        public int CurrentPage
         {
             get => _currentPage;
             set
@@ -47,11 +47,6 @@ namespace HospitalManagementSystem.ViewModels
                 HasPreviousPage = CurrentPage > 3;
                 HasNextPage = CurrentPage < pagesCount;
             }
-
-            // [1], 2, 3
-            // 1, [2], 3
-            // 1, 2, [3]
-            // 2, 3, [4]
         }
 
         private bool _hasNextPage;
@@ -69,28 +64,52 @@ namespace HospitalManagementSystem.ViewModels
         }
 
         private int _firstButtonContent = 1;
-        public int FirstButtonContent 
-        { 
-            get => _firstButtonContent; 
-            set => SetProperty(ref _firstButtonContent, value); 
-        }
-        
-        private int _secondButtonContent = 2;
-        public int SecondButtonContent 
+        public int FirstButtonContent
         {
-            get => _secondButtonContent; 
-            set => SetProperty(ref _secondButtonContent, value); 
+            get => _firstButtonContent;
+            set => SetProperty(ref _firstButtonContent, value);
+        }
+
+        private int _secondButtonContent = 2;
+        public int SecondButtonContent
+        {
+            get => _secondButtonContent;
+            set => SetProperty(ref _secondButtonContent, value);
         }
 
         private int _thirdButtonContent = 3;
-        public int ThirdButtonContent 
-        { 
-            get => _thirdButtonContent; 
-            set => SetProperty(ref _thirdButtonContent, value); 
+        public int ThirdButtonContent
+        {
+            get => _thirdButtonContent;
+            set => SetProperty(ref _thirdButtonContent, value);
+        }
+
+        private bool _isFirstSizeSelected = true;
+        public bool IsFirstSizeSelected
+        {
+            get => _isFirstSizeSelected;
+            set => SetProperty(ref _isFirstSizeSelected, value);
+        }
+
+        private bool _isSecondSizeSelected = false;
+        public bool IsSecondSizeSelected
+        {
+            get => _isSecondSizeSelected;
+            set => SetProperty(ref _isSecondSizeSelected, value);
+        }
+
+        private bool _isThirdSizeSelected = false;
+        public bool IsThirdSizeSelected
+        {
+            get => _isThirdSizeSelected;
+            set => SetProperty(ref _isThirdSizeSelected, value);
         }
 
         public ICommand NextPageCommand { get; }
         public ICommand PreviousPageCommand { get; }
+        public ICommand FirstPageSizeCommand { get; }
+        public ICommand SecondPageSizeCommand { get; }
+        public ICommand ThirdPageSizeCommand { get; }
 
         #endregion
 
@@ -115,6 +134,9 @@ namespace HospitalManagementSystem.ViewModels
 
             NextPageCommand = new Command(OnNextPage);
             PreviousPageCommand = new Command(OnPreviousPage);
+            FirstPageSizeCommand = new Command(OnFirstPageSize);
+            SecondPageSizeCommand = new Command(OnSecondPageSize);
+            ThirdPageSizeCommand = new Command(OnThirdPageSize);
 
             Load();
         }
@@ -145,6 +167,27 @@ namespace HospitalManagementSystem.ViewModels
             ThirdButtonContent -= 3;
         }
 
+        private void OnFirstPageSize()
+        {
+            IsFirstSizeSelected = true;
+            IsSecondSizeSelected = false;
+            IsThirdSizeSelected = false;
+        }
+
+        private void OnSecondPageSize()
+        {
+            IsFirstSizeSelected = false;
+            IsSecondSizeSelected = true;
+            IsThirdSizeSelected = false;
+        }
+
+        private void OnThirdPageSize()
+        {
+            IsFirstSizeSelected = false;
+            IsSecondSizeSelected = false;
+            IsThirdSizeSelected = true;
+        }
+
         private void Load()
         {
             var patients = _patientsService.GetPatients();
@@ -152,7 +195,7 @@ namespace HospitalManagementSystem.ViewModels
             pagesCount = (int)Math.Ceiling((double)totalCount / 20);
             HasNextPage = pagesCount > 3;
 
-            foreach(var patient in patients)
+            foreach (var patient in patients)
             {
                 Patients.Add(patient);
                 patientsList.Add(patient);

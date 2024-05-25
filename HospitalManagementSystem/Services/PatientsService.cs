@@ -13,7 +13,7 @@ namespace HospitalManagementSystem.Services
             _context = new HospitalDbContext();
         }
 
-        public List<Patient> GetPatients(string search = "", int pageNumber = 1, int pageSize = 20)
+        public List<Patient> GetPatients(string search = "", int pageNumber = 1, int pageSize = 15)
         {
             var query = _context.Patients
                 .Include(x => x.Appointments)
