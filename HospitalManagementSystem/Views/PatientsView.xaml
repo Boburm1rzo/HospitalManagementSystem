@@ -39,8 +39,8 @@
             <StackPanel Orientation="Horizontal">
                 <Label Content="Add" Foreground="WhiteSmoke" />
                 <materialDesign:PackIcon
-                    Width="25"
-                    Height="25"
+                    Width="20"
+                    Height="20"
                     VerticalAlignment="Center"
                     Foreground="WhiteSmoke"
                     Kind="Plus" />
@@ -56,7 +56,6 @@
                     x:Name="patientsDataGrid"
                     AutoGenerateColumns="False"
                     IsReadOnly="True"
-                    IsSynchronizedWithCurrentItem="True"
                     ItemsSource="{Binding Patients}"
                     SelectedItem="{Binding SelectedPatient}">
                     <DataGrid.InputBindings>
@@ -109,39 +108,6 @@
                             Header="Gender" />
                     </DataGrid.Columns>
                 </DataGrid>
-                <StackPanel
-                    Margin="0"
-                    HorizontalAlignment="Right"
-                    Orientation="Horizontal">
-                    <Button
-                        Background="Transparent"
-                        Command="{Binding PreviousPageCommand}"
-                        Content="Previous"
-                        Foreground="Blue"
-                        IsEnabled="{Binding HasPreviousPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <Button
-                        Margin="10,0,0,0"
-                        Background="Blue"
-                        Content="{Binding FirstButtonContent}"
-                        Foreground="White" />
-                    <Button
-                        Margin="10,0,0,0"
-                        Background="Blue"
-                        Content="{Binding SecondButtonContent}"
-                        Foreground="White" />
-                    <Button
-                        Margin="10,0,0,0"
-                        Background="Blue"
-                        Content="{Binding ThirdButtonContent}"
-                        Foreground="White" />
-                    <Button
-                        Margin="10,0,0,0"
-                        Background="Transparent"
-                        Command="{Binding NextPageCommand}"
-                        Content="Next"
-                        Foreground="Blue"
-                        IsEnabled="{Binding HasNextPage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </StackPanel>
             </StackPanel>
         </materialDesign:Card>
     </Grid>
