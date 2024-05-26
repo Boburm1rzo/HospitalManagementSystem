@@ -25,7 +25,7 @@ namespace HospitalManagementSystem.Services
         {
             if (context.Patients.Any()) return;
 
-            for (int i = 0; i < 10000; i++)
+            for (int i = 0; i < 500; i++)
             {
                 var patient = new Patient();
                 var (randomGender, fakerGender) = GetGender();

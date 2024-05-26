@@ -20,7 +20,7 @@ namespace HospitalManagementSystem.ViewModels
             set
             {
                 SetProperty(ref _searchText, value);
-                SearchPatients(value);
+                ApplyFilters();
             }
         }
 
@@ -33,9 +33,14 @@ namespace HospitalManagementSystem.ViewModels
 
         #region Pagination
 
+        private int _totalPatientsCount;
+        public int TotalPatientsCount
+        {
+            get => _totalPatientsCount;
+            set => SetProperty(ref _totalPatientsCount, value);
+        }
         private int pagesCount;
-        private int firstPageNumber = 1;
-        private int lastPageNumber = 3;
+        private int pageSize = 15;
 
         private int _currentPage = 1;
         public int CurrentPage
@@ -47,6 +52,27 @@ namespace HospitalManagementSystem.ViewModels
                 HasPreviousPage = CurrentPage > 3;
                 HasNextPage = CurrentPage < pagesCount;
             }
+        }
+
+        private bool _hasFirstPage;
+        public bool HasFirstPage
+        {
+            get => _hasFirstPage;
+            set => SetProperty(ref _hasFirstPage, value);
+        }
+
+        private bool _hasSecondPage;
+        public bool HasSecondPage
+        {
+            get => _hasSecondPage;
+            set => SetProperty(ref _hasSecondPage, value);
+        }
+
+        private bool _hasThirdPage;
+        public bool HasThirdPage
+        {
+            get => _hasThirdPage;
+            set => SetProperty(ref _hasThirdPage, value);
         }
 
         private bool _hasNextPage;
@@ -84,6 +110,27 @@ namespace HospitalManagementSystem.ViewModels
             set => SetProperty(ref _thirdButtonContent, value);
         }
 
+        private bool _isFirstPageSelected = true;
+        public bool IsFirstPageSelected
+        {
+            get => _isFirstPageSelected;
+            set => SetProperty(ref _isFirstPageSelected, value);
+        }
+
+        private bool _isSecondPageSelected = false;
+        public bool IsSecondPageSelected
+        {
+            get => _isSecondPageSelected;
+            set => SetProperty(ref _isSecondPageSelected, value);
+        }
+
+        private bool _isThirdPageSelected = false;
+        public bool IsThirdPageSelected
+        {
+            get => _isThirdPageSelected;
+            set => SetProperty(ref _isThirdPageSelected, value);
+        }
+
         private bool _isFirstSizeSelected = true;
         public bool IsFirstSizeSelected
         {
@@ -107,6 +154,9 @@ namespace HospitalManagementSystem.ViewModels
 
         public ICommand NextPageCommand { get; }
         public ICommand PreviousPageCommand { get; }
+        public ICommand FirstPageCommand { get; }
+        public ICommand SecondPageCommand { get; }
+        public ICommand ThirdPageCommand { get; }
         public ICommand FirstPageSizeCommand { get; }
         public ICommand SecondPageSizeCommand { get; }
         public ICommand ThirdPageSizeCommand { get; }
@@ -137,6 +187,9 @@ namespace HospitalManagementSystem.ViewModels
             FirstPageSizeCommand = new Command(OnFirstPageSize);
             SecondPageSizeCommand = new Command(OnSecondPageSize);
             ThirdPageSizeCommand = new Command(OnThirdPageSize);
+            FirstPageCommand = new Command(OnFirstPage);
+            SecondPageCommand = new Command(OnSecondPage);
+            ThirdPageCommand = new Command(OnThirdPage);
 
             Load();
         }
@@ -148,10 +201,18 @@ namespace HospitalManagementSystem.ViewModels
                 return;
             }
 
-            CurrentPage += 3;
             FirstButtonContent += 3;
             SecondButtonContent += 3;
             ThirdButtonContent += 3;
+
+            HasSecondPage = pagesCount > SecondButtonContent;
+            HasThirdPage = pagesCount > ThirdButtonContent;
+
+            IsFirstPageSelected = true;
+            IsSecondPageSelected = false;
+            IsThirdPageSelected = false;
+            CurrentPage = FirstButtonContent;
+            ApplyFilters();
         }
 
         private void OnPreviousPage()
@@ -172,6 +233,11 @@ namespace HospitalManagementSystem.ViewModels
             IsFirstSizeSelected = true;
             IsSecondSizeSelected = false;
             IsThirdSizeSelected = false;
+
+            pageSize = 15;
+            pagesCount = (int)Math.Ceiling((double)_totalPatientsCount / pageSize);
+
+            ApplyFilters();
         }
 
         private void OnSecondPageSize()
@@ -179,6 +245,11 @@ namespace HospitalManagementSystem.ViewModels
             IsFirstSizeSelected = false;
             IsSecondSizeSelected = true;
             IsThirdSizeSelected = false;
+
+            pageSize = 30;
+            pagesCount = (int)Math.Ceiling((double)_totalPatientsCount / pageSize);
+
+            ApplyFilters();
         }
 
         private void OnThirdPageSize()
@@ -186,14 +257,56 @@ namespace HospitalManagementSystem.ViewModels
             IsFirstSizeSelected = false;
             IsSecondSizeSelected = false;
             IsThirdSizeSelected = true;
+
+            pageSize = 50;
+            pagesCount = (int)Math.Ceiling((double)_totalPatientsCount / pageSize);
+
+            ApplyFilters();
+        }
+
+        private void OnFirstPage()
+        {
+            IsFirstPageSelected = true;
+            IsSecondPageSelected = false;
+            IsThirdPageSelected = false;
+
+            CurrentPage = FirstButtonContent;
+
+            ApplyFilters();
+        }
+
+        private void OnSecondPage()
+        {
+            IsFirstPageSelected = false;
+            IsSecondPageSelected = true;
+            IsThirdPageSelected = false;
+
+            CurrentPage = SecondButtonContent;
+
+            ApplyFilters();
+        }
+
+        private void OnThirdPage()
+        {
+            IsFirstPageSelected = false;
+            IsSecondPageSelected = false;
+            IsThirdPageSelected = true;
+
+            CurrentPage = ThirdButtonContent;
+
+            ApplyFilters();
         }
 
         private void Load()
         {
             var patients = _patientsService.GetPatients();
-            var totalCount = _patientsService.GetTotalCount();
-            pagesCount = (int)Math.Ceiling((double)totalCount / 20);
+            _totalPatientsCount = _patientsService.GetTotalCount();
+            pagesCount = (int)Math.Ceiling((double)_totalPatientsCount / pageSize);
+
             HasNextPage = pagesCount > 3;
+            HasFirstPage = pagesCount > 0;
+            HasSecondPage = pagesCount > 1;
+            HasThirdPage = pagesCount > 2;
 
             foreach (var patient in patients)
             {
@@ -202,10 +315,9 @@ namespace HospitalManagementSystem.ViewModels
             }
         }
 
-        private void SearchPatients(string searchText)
+        private void ApplyFilters()
         {
-            var patients = _patientsService.GetPatients(searchText);
-
+            var patients = _patientsService.GetPatients(SearchText, CurrentPage, pageSize);
             Patients.Clear();
 
             foreach (var patient in patients)

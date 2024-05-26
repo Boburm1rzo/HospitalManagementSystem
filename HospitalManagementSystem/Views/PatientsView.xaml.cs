@@ -9,7 +9,10 @@ namespace HospitalManagementSystem.Views
         {
             InitializeComponent();
 
-            DataContext = new PatientsViewModel();
+            var vm = new PatientsViewModel();
+            DataContext = vm;
+
+            // this.Pager = vm.TotalPatientsCount;
         }
     }
 }
